@@ -1,13 +1,13 @@
-function getPoleGry() {
-	return document.getElementById("pole_gry");
+function getGameArea() {
+	return document.getElementById("game_area");
 }
 
-function generateBombs(iloscBomb) {
-	while (iloscBomb > 0) {
-		for (var j = 0, row; row = getPoleGry().rows[j]; j++) {
+function generateBombs(bombs) {
+	while (bombs > 0) {
+		for (var j = 0, row; row = getGameArea().rows[j]; j++) {
 			for (var x = 0, cell; cell = row.cells[x]; x++) {
-				if (Math.random() > 0.95 && cell.hasBomb == false && iloscBomb > 0) {
-					iloscBomb--;
+				if (Math.random() > 0.95 && cell.hasBomb == false && bombs > 0) {
+					bombs--;
 					cell["hasBomb"] = true;
 				}
 			}
@@ -15,142 +15,142 @@ function generateBombs(iloscBomb) {
 	}
 }
 
-function generateFlags(bomby) {
-	var iloscFlag = document.getElementById("flagi");
+function generateFlags(bombs) {
+	var flags = document.getElementById("flags");
 	
-	iloscFlag.innerHTML = bomby;
+	flags.innerHTML = bombs;
 }
 
-function startCzas() {
-	var zegar = document.getElementById("czas");
+function startTime() {
+	var time = document.getElementById("time");
 	var min = 0;
-	var sek = 0;
+	var sec = 0;
 	
-	zegar.innerHTML = "0:0";
+	time.innerHTML = "0:0";
 	
-	var liczenieCzasu = function() {
-		sek++;
+	var counter = function() {
+		sec++;
 		
-		if (sek >= 60) {
+		if (sec >= 60) {
 			min++;
-			sek = 0;
+			sec = 0;
 		}
 		
-		zegar.innerHTML = min + ":" + sek;
+		time.innerHTML = min + ":" + sec;
 	}
 
-	licznik = setInterval(liczenieCzasu, 1000);
+	timer = setInterval(counter, 1000);
 }
 
-function restartCzas() {
-	if (window.licznik !== undefined) {
-		clearInterval(licznik);
+function restartTime() {
+	if (window.timer !== undefined) {
+		clearInterval(timer);
 	}
 	
-	document.getElementById("czas").innerHTML = "0:0";
+	document.getElementById("time").innerHTML = "0:0";
 	
-	startCzas();
+	startTime();
 }
 
-function stopCzas() {
-	clearInterval(licznik);
+function stopTime() {
+	clearInterval(timer);
 }
 
-function reload(szerokosc, wysokosc, bomby) {
-	var pole_gry = document.getElementById("pole_gry");
-	pole_gry.innerHTML = "";
+function reload(width, height, bombs) {
+	var game_area = document.getElementById("game_area");
+	game_area.innerHTML = "";
 
-	for (var i = 1; i <= wysokosc; i++) {
-		var row = pole_gry.insertRow();
+	for (var i = 1; i <= height; i++) {
+		var row = game_area.insertRow();
 
-		for (var j = 1; j <= szerokosc; j++) {
+		for (var j = 1; j <= width; j++) {
 			var cell = row.insertCell();
 
 			cell["hasBomb"] = false;
-			cell["squareNumber"] = cell.cellIndex + 1 + szerokosc*cell.parentNode.rowIndex;
+			cell["squareNumber"] = cell.cellIndex + 1 + width*cell.parentNode.rowIndex;
 			cell["isFlagged"] = false;
 			
-			cell.innerHTML = "<button onclick='sprawdzPole(this.parentElement)' oncontextmenu='postawFlage(this.parentElement); return false;'></button>";
+			cell.innerHTML = "<button onclick='checkBox(this.parentElement)' oncontextmenu='spawnFlag(this.parentElement); return false;'></button>";
 		}
 	}
 	
-	generateBombs(bomby);
-	restartCzas();
-	generateFlags(bomby);
+	generateBombs(bombs);
+	restartTime();
+	generateFlags(bombs);
 }
 
 window.onload = function() {
 	reload(8, 8, 10);
 }
 
-function zmianaTrudnosci(trudnosc) {
-	var szerokosc = 8;
-	var wysokosc = 8;
-	var bomby = 10;
+function changeDifficulty(difficulty) {
+	var width = 8;
+	var height = 8;
+	var bombs = 10;
 
-	switch (trudnosc) {
-		case "latwy":
-			var szerokosc = 8;
-			var wysokosc = 8;
-			var bomby = 10;
+	switch (difficulty) {
+		case "easy":
+			var width = 8;
+			var height = 8;
+			var bombs = 10;
 			
 			break;
-		case "sredni":
-			var szerokosc = 16;
-			var wysokosc = 16;
-			var bomby = 40;
+		case "normal":
+			var width = 16;
+			var height = 16;
+			var bombs = 40;
 	
 			break;
-		case "trudny":
-			var szerokosc = 30;
-			var wysokosc = 16;
-			var bomby = 99;
+		case "hard":
+			var width = 30;
+			var height = 16;
+			var bombs = 99;
 	
 			break;
 		default:
-			var szerokosc = 8;
-			var wysokosc = 8;
-			var bomby = 10;
+			var width = 8;
+			var height = 8;
+			var bombs = 10;
 			
 			break;
 	}
 
-	reload(szerokosc, wysokosc, bomby);
+	reload(width, height, bombs);
 }
 
-function wlaczRestart() {
+function enableRestart() {
 	document.getElementById("restart").removeAttribute("disabled");
 }
 
-function wylaczPoleGry() {
-	for (var j = 0, row; row = getPoleGry().rows[j]; j++) {
+function disableGameArea() {
+	for (var j = 0, row; row = getGameArea().rows[j]; j++) {
 		for (var x = 0, cell; cell = row.cells[x]; x++) {
 			cell.firstChild.setAttribute("disabled", true);
 		}
 	}
 }
 
-function wylaczRestart() {
+function disableRestart() {
 	document.getElementById("restart").setAttribute("disabled", true);
 }
 
 function restart() {
-	zmianaTrudnosci(document.getElementById("poziom_trudnosci").value);
+	changeDifficulty(document.getElementById("difficulty").value);
 	
-	restartCzas();
+	restartTime();
 	
-	wylaczRestart();
+	disableRestart();
 }
 
-function odkryjBomby(czy_wygrana) {
-	var pole_gry = getPoleGry();
+function revealBombs(winning_reveal) {
+	var game_area = getGameArea();
 	
-	for (var j = 0, row; row = getPoleGry().rows[j]; j++) {
+	for (var j = 0, row; row = getGameArea().rows[j]; j++) {
 		for (var x = 0, cell; cell = row.cells[x]; x++) {
 			if (cell.hasBomb == true) {
-				cell.firstChild.innerHTML = "<img src='bomba.png' alt='Bomba' width='14' height='17'>";
+				cell.firstChild.innerHTML = "<img src='bomb.png' alt='Bomb' width='14' height='17'>";
 
-				if (czy_wygrana) {
+				if (winning_reveal) {
 					cell.firstChild.style.backgroundColor = "lightgreen";
 				} else {
 					cell.firstChild.style.backgroundColor = "red";
@@ -160,36 +160,36 @@ function odkryjBomby(czy_wygrana) {
 	}
 }
 
-function policzLiczbe(pole) {
-	var index_pola = pole.cellIndex;
-	var index_rzedu = pole.parentNode.rowIndex;
-	var pole_gry = getPoleGry();
+function countNumber(box) {
+	var box_index = box.cellIndex;
+	var row_index = box.parentNode.rowIndex;
+	var game_area = getGameArea();
 	
-	var iloscBomb = 0;
+	var bombs = 0;
 	
 	for (var i = -1; i <= 1; i++) {
 		for (var j = -1; j <= 1; j++) {
-			if (index_rzedu + i >= 0 && index_rzedu + i <= pole_gry.rows.length - 1 && index_pola + j >= 0 && index_pola + j <= pole_gry.rows[0].cells.length - 1) {
-				var poleSprawdzajace = pole_gry.rows[index_rzedu + i].cells[index_pola + j];
+			if (row_index + i >= 0 && row_index + i <= game_area.rows.length - 1 && box_index + j >= 0 && box_index + j <= game_area.rows[0].cells.length - 1) {
+				var boxToCheck = game_area.rows[row_index + i].cells[box_index + j];
 				
-				if (poleSprawdzajace.hasBomb) {
-					iloscBomb++;
+				if (boxToCheck.hasBomb) {
+					bombs++;
 				}
 			}
 		}
 	}
 	
-	if (iloscBomb == 0) {
+	if (bombs == 0) {
 		for (var i = -1; i <= 1; i++) {
 			for (var j = -1; j <= 1; j++) {
-				if (index_rzedu + i >= 0 && index_rzedu + i <= pole_gry.rows.length - 1 && index_pola + j >= 0 && index_pola + j <= pole_gry.rows[0].cells.length - 1) {
-					var poleSprawdzajace = pole_gry.rows[index_rzedu + i].cells[index_pola + j];
+				if (row_index + i >= 0 && row_index + i <= game_area.rows.length - 1 && box_index + j >= 0 && box_index + j <= game_area.rows[0].cells.length - 1) {
+					var boxToCheck = game_area.rows[row_index + i].cells[box_index + j];
 					
-					if (poleSprawdzajace.firstChild.hasAttribute("disabled") == false && poleSprawdzajace.isFlagged == false) {
-						poleSprawdzajace.firstChild.innerHTML = "";
-						poleSprawdzajace.firstChild.setAttribute("disabled", true);
+					if (boxToCheck.firstChild.hasAttribute("disabled") == false && boxToCheck.isFlagged == false) {
+						boxToCheck.firstChild.innerHTML = "";
+						boxToCheck.firstChild.setAttribute("disabled", true);
 						
-						poleSprawdzajace.firstChild.innerHTML = policzLiczbe(poleSprawdzajace);
+						boxToCheck.firstChild.innerHTML = countNumber(boxToCheck);
 					}
 				}
 			}
@@ -198,93 +198,93 @@ function policzLiczbe(pole) {
 		return "";
 	}
 	
-	return iloscBomb;
+	return bombs;
 }
 
-function odkryjPole(pole) {
-	var przycisk = pole.firstChild;
+function revealBox(box) {
+	var button = box.firstChild;
 	
-	przycisk.setAttribute("disabled", true);
-	przycisk.innerHTML = policzLiczbe(pole);
+	button.setAttribute("disabled", true);
+	button.innerHTML = countNumber(box);
 }
 
-function sprawdzCzyWygrana() {
-	var pole_gry = getPoleGry();
-	var saBomby = false
+function checkIfWin() {
+	var game_area = getGameArea();
+	var bombsExist = false
 
-	for (var j = 0, row; row = pole_gry.rows[j]; j++) {
+	for (var j = 0, row; row = game_area.rows[j]; j++) {
 		for (var x = 0, cell; cell = row.cells[x]; x++) {
 			if (cell.hasBomb && !cell.isFlagged) {
-				saBomby = true
+				bombsExist = true
 			}
 		}
 	}
 
-	if (!saBomby) {
-		alert("Wygrałeś!")
+	if (!bombsExist) {
+		alert("You Win!")
 
-		wlaczRestart();
-		wylaczPoleGry();
-		stopCzas();
+		enableRestart();
+		disableGameArea();
+		stopTime();
 		
-		odkryjBomby(true);
+		revealBombs(true);
 
-		for (var j = 0, row; row = pole_gry.rows[j]; j++) {
+		for (var j = 0, row; row = game_area.rows[j]; j++) {
 			for (var x = 0, cell; cell = row.cells[x]; x++) {
 				if (!cell.hasAttribute("disabled") && !cell.hasBomb) {
-					odkryjPole(cell)
+					revealBox(cell)
 				}
 			}
 		}
 	}
 }
 
-function sprawdzPole(pole) {
-	if (pole.isFlagged) {
+function checkBox(box) {
+	if (box.isFlagged) {
 		return;
 	}
 	
-	if (pole.hasBomb) {
-		alert("Booom!");
+	if (box.hasBomb) {
+		alert("Boooom! You lost!");
 		
-		wlaczRestart();
-		wylaczPoleGry();
-		stopCzas();
+		enableRestart();
+		disableGameArea();
+		stopTime();
 		
-		odkryjBomby(false);
+		revealBombs(false);
 	} else {
-		odkryjPole(pole);
+		revealBox(box);
 	}
 }
 
-function Flag(pole) {
-	pole.firstChild.innerHTML = "<img src='flaga.png' alt='Flaga' width='14' height='17'>";
-	pole.isFlagged = true;
+function Flag(box) {
+	box.firstChild.innerHTML = "<img src='flag.png' alt='Flag' width='14' height='17'>";
+	box.isFlagged = true;
 	
-	var iloscFlag = document.getElementById("flagi").innerHTML;
+	var flags = document.getElementById("flags").innerHTML;
 	
-	iloscFlag--;
-	document.getElementById("flagi").innerHTML = iloscFlag;
+	flags--;
+	document.getElementById("flags").innerHTML = flags;
 
-	if (pole.hasBomb) {
-		sprawdzCzyWygrana()
+	if (box.hasBomb) {
+		checkIfWin()
 	}
 }
-function Unflag(pole) {
-	pole.firstChild.innerHTML = "";
-	pole.isFlagged = false;
+function Unflag(box) {
+	box.firstChild.innerHTML = "";
+	box.isFlagged = false;
 	
-	var iloscFlag = document.getElementById("flagi").innerHTML;
+	var flags = document.getElementById("flags").innerHTML;
 	
-	iloscFlag++;
+	flags++;
 	
-	document.getElementById("flagi").innerHTML = iloscFlag;
+	document.getElementById("flags").innerHTML = flags;
 }
 
-function postawFlage(pole) {
-	if (pole.isFlagged) {
-		Unflag(pole);
-	} else if (document.getElementById("flagi").innerHTML > 0) {
-		Flag(pole);
+function spawnFlag(box) {
+	if (box.isFlagged) {
+		Unflag(box);
+	} else if (document.getElementById("flags").innerHTML > 0) {
+		Flag(box);
 	}
 }

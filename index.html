@@ -1,39 +1,39 @@
 <!DOCTYPE HTML>
 
-<html lang="pl">
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Saper</title>
+		<title>Minesweeper</title>
 		
 		<link rel="stylesheet" href="css.css">
 		<script src="js.js"></script>
 	</head>
 
 	<body>
-		<div id="strona">
-			<h1>Saper</h1>
+		<div id="site">
+			<h1>Minesweeper</h1>
 		
-			<div id="saper">
-				<div id="interfejs">
-					<div id="poziom">
-						<select id="poziom_trudnosci" onchange="zmianaTrudnosci(this.value)">
-							<option value="latwy">Łatwy</option>
-							<option value="sredni">Normalny</option>
-							<option value="trudny">Trudny</option>
+			<div id="minesweeper">
+				<div id="interface">
+					<div id="difficulty">
+						<select id="difficulty_level" onchange="changeDifficulty(this.value)">
+							<option value="easy">Easy</option>
+							<option value="normal">Normal</option>
+							<option value="hard">Hard</option>
 						</select>
 					</div>
 
-					<div id="flagi">
+					<div id="flags">
 						
 					</div>
 
-					<div id="czas">
+					<div id="time">
 						
 					</div>
 				</div>
 
 				<div>
-					<table id="pole_gry">
+					<table id="game_area">
 						
 					</table>
 				</div>

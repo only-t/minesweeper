@@ -30,13 +30,13 @@ button {
 	margin-top: 50px;
 }
 
-#strona {
+#site {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
 }
 
-#saper {
+#minesweeper {
 	background-color: rgb(234, 234, 234);
 	margin-left: auto;
 	margin-right: auto;
@@ -44,7 +44,7 @@ button {
 	display: inline-block;
 }
 
-#interfejs {
+#interface {
 	height: 100px;
 	margin-left: auto;
 	margin-right: auto;
@@ -56,20 +56,20 @@ button {
 	align-items: stretch;
 }
 
-#pole_gry {
+#game_area {
 	margin-left: auto;
 	margin-right: auto;
 	font-size: 10px;
 }
 
-#poziom {
+#difficulty {
 	padding-top: 35px;
 }
 
-#flagi {
+#flags {
 	padding-top: 35px;
 }
 
-#czas {
+#time {
 	padding-top: 35px;
 }
