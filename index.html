@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<title>Saper</title>
+		
+		<link rel="stylesheet" href="css.css">
+		<script src="js.js"></script>
+	</head>
+
+	<body>
+		<div id="strona">
+			<h1>Saper</h1>
+		
+			<div id="saper">
+				<div id="interfejs">
+					<div id="poziom">
+						<select id="poziom_trudnosci" onchange="zmianaTrudnosci(this.value)">
+							<option value="latwy">Łatwy</option>
+							<option value="sredni">Normalny</option>
+							<option value="trudny">Trudny</option>
+						</select>
+					</div>
+
+					<div id="flagi">
+						
+					</div>
+
+					<div id="czas">
+						
+					</div>
+				</div>
+
+				<div>
+					<table id="pole_gry">
+						
+					</table>
+				</div>
+			</div>
+			
+			<footer><button id="restart" disabled onclick="restart()">Restart</button></footer>
+		</div>
+	</body>
+</html>
